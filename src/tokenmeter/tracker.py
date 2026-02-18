@@ -8,6 +8,7 @@ from typing import Any
 
 from tokenmeter._types import UsageRecord
 from tokenmeter.cost import CostCalculator
+from tokenmeter.energy.calculator import EnergyCalculator
 from tokenmeter.providers import ProviderRegistry
 from tokenmeter.storage._base import StorageBackend
 from tokenmeter.storage.memory import MemoryStorage
@@ -24,12 +25,14 @@ class UsageTracker:
         providers: ProviderRegistry | None = None,
         session_id: str | None = None,
         water_calculator: WaterCalculator | None = None,
+        energy_calculator: EnergyCalculator | None = None,
     ) -> None:
         self._storage = storage or MemoryStorage()
         self._cost = cost_calculator or CostCalculator()
         self._providers = providers or ProviderRegistry()
         self._session_id = session_id or str(uuid.uuid4())
         self._water = water_calculator
+        self._energy = energy_calculator
 
     @property
     def session_id(self) -> str:
@@ -70,6 +73,16 @@ class UsageTracker:
                 cache_write_tokens=cache_write_toks,
             )
 
+        energy_wh = Decimal("0")
+        if self._energy is not None:
+            energy_wh = self._energy.calculate(
+                model=model,
+                input_tokens=input_toks,
+                output_tokens=output_toks,
+                cache_read_tokens=cache_read_toks,
+                cache_write_tokens=cache_write_toks,
+            )
+
         record = UsageRecord(
             id=str(uuid.uuid4()),
             timestamp=datetime.now(),
@@ -86,6 +99,7 @@ class UsageTracker:
             user_id=user_id,
             tags=dict(tags),
             water_ml=water_ml,
+            energy_wh=energy_wh,
         )
 
         self._storage.save(record)
@@ -126,6 +140,16 @@ class UsageTracker:
                 cache_write_tokens=cache_write_tokens,
             )
 
+        energy_wh = Decimal("0")
+        if self._energy is not None:
+            energy_wh = self._energy.calculate(
+                model=model,
+                input_tokens=input_tokens,
+                output_tokens=output_tokens,
+                cache_read_tokens=cache_read_tokens,
+                cache_write_tokens=cache_write_tokens,
+            )
+
         record = UsageRecord(
             id=str(uuid.uuid4()),
             timestamp=datetime.now(),
@@ -143,6 +167,7 @@ class UsageTracker:
             tags=dict(tags),
             is_estimate=is_estimate,
             water_ml=water_ml,
+            energy_wh=energy_wh,
         )
 
         self._storage.save(record)
@@ -191,6 +216,28 @@ class UsageTracker:
             tags=tags,
         )
         return sum((r.water_ml for r in records), Decimal("0"))
+
+    def get_total_energy(
+        self,
+        provider: str | None = None,
+        model: str | None = None,
+        user_id: str | None = None,
+        session_id: str | None = None,
+        since: datetime | None = None,
+        until: datetime | None = None,
+        tags: dict[str, str] | None = None,
+    ) -> Decimal:
+        """Get total energy consumption (Wh) with optional filters."""
+        records = self._storage.query(
+            provider=provider,
+            model=model,
+            user_id=user_id,
+            session_id=session_id,
+            since=since,
+            until=until,
+            tags=tags,
+        )
+        return sum((r.energy_wh for r in records), Decimal("0"))
 
     def get_records(
         self,
