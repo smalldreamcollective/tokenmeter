@@ -40,6 +40,12 @@ uv pip install -e ".[dev]"
 - **Type unions:** Use `X | None` syntax (not `Optional[X]`)
 - **Tests:** pytest, fixtures in `tests/conftest.py`, mock response objects for Anthropic/OpenAI
 
+## Git Workflow
+
+- **Always create a new branch for every feature or bug fix.** Never commit directly to `main`.
+- Branch naming: `feat-<feature-name>` for features, `fix-<description>` for bug fixes.
+- Open a pull request against `main` when the feature is complete and the verification suite passes.
+
 ## New Feature Checklist
 
 Every new feature **must** complete these steps in order:
