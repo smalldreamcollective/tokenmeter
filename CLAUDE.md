@@ -40,6 +40,12 @@ uv pip install -e ".[dev]"
 - **Type unions:** Use `X | None` syntax (not `Optional[X]`)
 - **Tests:** pytest, fixtures in `tests/conftest.py`, mock response objects for Anthropic/OpenAI
 
+## Git Workflow
+
+- **Always create a new branch for every feature or bug fix.** Never commit directly to `main`.
+- Branch naming: `feat-<feature-name>` for features, `fix-<description>` for bug fixes.
+- Open a pull request against `main` when the feature is complete and the verification suite passes.
+
 ## New Feature Checklist
 
 Every new feature **must** complete these steps in order:
@@ -85,19 +91,24 @@ src/tokenmeter/
 │   ├── memory.py        # In-memory (default)
 │   ├── sqlite.py        # SQLite persistent
 │   └── json_file.py     # JSON Lines file
-└── water/
-    ├── __init__.py      # WaterRegistry — model energy lookup
+├── water/
+│   ├── __init__.py      # WaterRegistry — model energy lookup
+│   ├── _data.py         # Built-in energy tables (Wh per million tokens)
+│   └── calculator.py    # WaterCalculator — water usage estimation
+└── energy/
+    ├── __init__.py      # EnergyRegistry — model energy lookup (independent of water/)
     ├── _data.py         # Built-in energy tables (Wh per million tokens)
-    └── calculator.py    # WaterCalculator — water usage estimation
+    └── calculator.py    # EnergyCalculator — direct Wh/kWh energy estimation
 ```
 
 ## Key Patterns
 
-- **Registry pattern:** `PricingRegistry`, `WaterRegistry`, `ProviderRegistry` all follow the same pattern — load builtins, support custom registration, resolve aliases
+- **Registry pattern:** `PricingRegistry`, `WaterRegistry`, `EnergyRegistry`, `ProviderRegistry` all follow the same pattern — load builtins, support custom registration, resolve aliases
 - **Facade pattern:** `Meter` class in `__init__.py` wires together all subsystems and exposes a simplified API
 - **Storage abstraction:** Three backends (memory, sqlite, jsonl) behind `StorageBackend` ABC, selected via `create_storage()` factory
 - **Provider auto-detection:** `ProviderRegistry.detect(response)` inspects `__module__` to identify Anthropic vs OpenAI response objects
 - **Water is best-effort:** `WaterRegistry.get()` returns `None` for unknown models (unlike `PricingRegistry.get()` which raises `UnknownModelError`). Water calculation returns `Decimal("0")` when a model isn't recognized.
+- **Energy is best-effort:** `EnergyRegistry.get()` follows the same pattern as `WaterRegistry` — returns `None` for unknown models, `EnergyCalculator` returns `Decimal("0")`. Energy and water are fully independent modules.
 
 ## Test Helpers
 

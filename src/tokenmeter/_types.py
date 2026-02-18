@@ -47,6 +47,7 @@ class UsageRecord:
     tags: dict[str, str] = field(default_factory=dict)
     is_estimate: bool = False
     water_ml: Decimal = Decimal("0")  # estimated water usage in milliliters
+    energy_wh: Decimal = Decimal("0")  # estimated energy consumption in watt-hours
 
 
 @dataclass
@@ -91,6 +92,15 @@ class WaterProfile:
 @dataclass(frozen=True)
 class ModelWaterProfile:
     """Energy characteristics for a model. energy_per_mtok is Wh per million tokens."""
+
+    model_id: str
+    provider: str
+    energy_per_mtok: Decimal
+
+
+@dataclass(frozen=True)
+class ModelEnergyProfile:
+    """Energy consumption profile for a model. energy_per_mtok is Wh per million tokens."""
 
     model_id: str
     provider: str

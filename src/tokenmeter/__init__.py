@@ -10,6 +10,7 @@ from tokenmeter._types import (
     BudgetConfig,
     BudgetExceededError,
     BudgetStatus,
+    ModelEnergyProfile,
     ModelPricing,
     ModelWaterProfile,
     UnknownModelError,
@@ -19,6 +20,8 @@ from tokenmeter._types import (
 from tokenmeter.alerts import AlertManager
 from tokenmeter.budget import BudgetManager
 from tokenmeter.cost import CostCalculator
+from tokenmeter.energy import EnergyRegistry
+from tokenmeter.energy.calculator import EnergyCalculator
 from tokenmeter.pricing import PricingRegistry
 from tokenmeter.providers import ProviderRegistry
 from tokenmeter.storage import create_storage
@@ -42,9 +45,12 @@ __all__ = [
     "WaterProfile",
     "WaterCalculator",
     "WaterRegistry",
+    "EnergyCalculator",
+    "EnergyRegistry",
     "UsageRecord",
     "ModelPricing",
     "ModelWaterProfile",
+    "ModelEnergyProfile",
     "BudgetConfig",
     "BudgetStatus",
     "AlertThreshold",
@@ -160,6 +166,9 @@ class Meter:
             profile=water_profile or WaterProfile(),
         )
 
+        self._energy_registry = EnergyRegistry()
+        self.energy = EnergyCalculator(registry=self._energy_registry)
+
         self.cost = CostCalculator(self._pricing)
         self.tokens = TokenCounter(self._provider_registry)
         self.tracker = UsageTracker(
@@ -168,6 +177,7 @@ class Meter:
             providers=self._provider_registry,
             session_id=session_id,
             water_calculator=self.water,
+            energy_calculator=self.energy,
         )
         self.budget = BudgetManager(self.tracker)
         self.alerts = AlertManager(self.budget)
@@ -201,6 +211,14 @@ class Meter:
     def estimate_water(self, text: str, model: str) -> Decimal:
         """Estimate the water usage of sending this text as input to a model."""
         return self.water.estimate_input_water(text, model)
+
+    def total_energy(self, **filters: Any) -> Decimal:
+        """Get total energy consumption (Wh) with optional filters."""
+        return self.tracker.get_total_energy(**filters)
+
+    def estimate_energy(self, text: str, model: str) -> Decimal:
+        """Estimate the energy consumption (Wh) of sending this text as input to a model."""
+        return self.energy.estimate_input_energy(text, model)
 
     def summary(self, group_by: str = "model") -> dict[str, Decimal]:
         """Aggregate spending by model, provider, user_id, or session_id."""
