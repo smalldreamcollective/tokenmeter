@@ -56,7 +56,7 @@ energy_wh  = calc.estimate_input_energy(text, model)
 
 #### Formula
 
-```
+```text
 total_tokens = input_tokens + output_tokens + cache_read_tokens + cache_write_tokens
 energy_wh    = (total_tokens / 1_000_000) * energy_per_mtok
 energy_kwh   = energy_wh / 1000
@@ -83,7 +83,7 @@ meter.estimate_energy("prompt text", model="claude-sonnet-4-5")  # Wh
 
 Add field:
 ```python
-energy_wh: Decimal = field(default_factory=lambda: Decimal("0"))
+energy_wh: Decimal = Decimal("0")
 ```
 
 ### Storage
@@ -140,7 +140,7 @@ Same Wh/MTok values as `water/_data.py` — an independent copy.
 
 ## File Layout
 
-```
+```text
 src/tokenmeter/energy/
 ├── __init__.py      # EnergyRegistry
 ├── _data.py         # ANTHROPIC_ENERGY, OPENAI_ENERGY tables

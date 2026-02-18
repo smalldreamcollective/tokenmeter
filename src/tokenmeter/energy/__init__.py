@@ -38,7 +38,7 @@ class EnergyRegistry:
         """List all known model IDs, optionally filtered by provider."""
         if provider is None:
             return list(self._models.keys())
-        return [m for m, p in self._models.items() if p.provider == provider]
+        return [p.model_id for p in self._models.values() if p.provider == provider]
 
     def _resolve(self, model: str) -> str:
         """Resolve aliases and normalize model strings."""
