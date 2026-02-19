@@ -297,13 +297,21 @@ def history(
     # Show most recent first, limited
     records = sorted(records, key=lambda r: r.timestamp, reverse=True)[:limit]
 
-    click.echo(f"{'Timestamp':<20} {'Model':<25} {'In':>8} {'Out':>8} {'Cost':>12} {'Water':>10} {'Energy':>12}")
-    click.echo(f"{'─' * 99}")
+    header = (
+        f"{'Timestamp':<20} {'Model':<25} {'In':>8} {'Out':>8}"
+        f" {'Cost':>12} {'Water':>10} {'Energy':>12}"
+    )
+    click.echo(header)
+    click.echo("─" * len(header))
     for r in records:
         ts = r.timestamp.strftime("%Y-%m-%d %H:%M")
         water_str = f"~{r.water_ml:.1f} mL" if r.water_ml > 0 else "—"
         energy_str = f"~{r.energy_wh:.4f} Wh" if r.energy_wh > 0 else "—"
-        click.echo(f"{ts:<20} {r.model:<25} {r.input_tokens:>8,} {r.output_tokens:>8,} ${r.total_cost:>10.6f} {water_str:>10} {energy_str:>12}")
+        row = (
+            f"{ts:<20} {r.model:<25} {r.input_tokens:>8,} {r.output_tokens:>8,}"
+            f" ${r.total_cost:>10.6f} {water_str:>10} {energy_str:>12}"
+        )
+        click.echo(row)
 
 
 # ---------- budget ----------
