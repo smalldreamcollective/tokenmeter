@@ -37,7 +37,7 @@ class AnthropicProvider(Provider):
         return result
 
     def extract_model(self, response: Any) -> str:
-        return response.model
+        return str(response.model)
 
     def matches_response(self, response: Any) -> bool:
         type_name = type(response).__module__

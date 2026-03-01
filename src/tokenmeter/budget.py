@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta
 from decimal import Decimal
+from typing import Any
 
 from tokenmeter._types import BudgetConfig, BudgetExceededError, BudgetStatus
 from tokenmeter.tracker import UsageTracker
@@ -79,7 +80,7 @@ class BudgetManager:
 
     def _check_one(self, config: BudgetConfig, user_id: str | None = None) -> BudgetStatus:
         since = _period_start(config.period)
-        kwargs: dict = {}
+        kwargs: dict[str, Any] = {}
         if since is not None:
             kwargs["since"] = since
         if config.scope != "global":

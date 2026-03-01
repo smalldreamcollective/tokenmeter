@@ -5,6 +5,7 @@ import threading
 from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
 
 from tokenmeter._types import UsageRecord
 from tokenmeter.storage._base import StorageBackend
@@ -68,7 +69,7 @@ class JsonFileStorage(StorageBackend):
         return [_dict_to_record(json.loads(line)) for line in lines if line.strip()]
 
 
-def _record_to_dict(record: UsageRecord) -> dict:
+def _record_to_dict(record: UsageRecord) -> dict[str, Any]:
     return {
         "id": record.id,
         "timestamp": record.timestamp.isoformat(),
@@ -90,7 +91,7 @@ def _record_to_dict(record: UsageRecord) -> dict:
     }
 
 
-def _dict_to_record(d: dict) -> UsageRecord:
+def _dict_to_record(d: dict[str, Any]) -> UsageRecord:
     return UsageRecord(
         id=d["id"],
         timestamp=datetime.fromisoformat(d["timestamp"]),
