@@ -20,6 +20,11 @@ classifiers = [
 
 dependencies = []
 
+[project.urls]
+Homepage = "https://github.com/smalldreamcollective/tokenmeter"
+Repository = "https://github.com/smalldreamcollective/tokenmeter"
+Issues = "https://github.com/smalldreamcollective/tokenmeter/issues"
+
 [project.scripts]
 tokenmeter = "tokenmeter.cli:cli"
 
