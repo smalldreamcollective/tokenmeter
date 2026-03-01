@@ -429,12 +429,12 @@ def clear(ctx: click.Context, yes: bool) -> None:
 @cli.command()
 @click.pass_context
 def ui(ctx: click.Context) -> None:
-    """Launch the interactive terminal dashboard (requires tokenmeter[tui])."""
+    """Launch the interactive terminal dashboard (requires smalldreamcollective-tokenmeter[tui])."""
     try:
         from tokenmeter.tui import TokenmeterApp
     except ImportError:
         raise click.ClickException(
-            "Textual is not installed. Run: uv pip install 'tokenmeter[tui]'"
+            "Textual is not installed. Run: uv pip install 'smalldreamcollective-tokenmeter[tui]'"
         )
     db = ctx.obj["db"]
     TokenmeterApp(db_path=db).run()
