@@ -40,6 +40,10 @@ uv pip install -e ".[dev]"
 - **Type unions:** Use `X | None` syntax (not `Optional[X]`)
 - **Tests:** pytest, fixtures in `tests/conftest.py`, mock response objects for Anthropic/OpenAI
 
+## Security
+
+- **NEVER read `.env` or any file containing real secrets.** If a task requires knowing the value of an environment variable, ask the user to confirm it is set — do not read the file directly.
+
 ## Git Workflow
 
 - **Always create a new branch for every change, no matter how small.** Never commit directly to `main`.
