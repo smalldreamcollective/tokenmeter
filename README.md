@@ -6,18 +6,18 @@ Track, budget, and understand the cost of your AI API calls.
 
 ```bash
 # Core (zero dependencies)
-uv pip install tokenmeter
+uv pip install smalldreamcollective-tokenmeter
 
 # With CLI
-uv pip install "tokenmeter[cli]"        # adds click
+uv pip install "smalldreamcollective-tokenmeter[cli]"        # adds click
 
 # With accurate token counting
-uv pip install "tokenmeter[openai]"     # adds tiktoken
-uv pip install "tokenmeter[anthropic]"  # adds anthropic SDK
-uv pip install "tokenmeter[all]"        # CLI + both providers
+uv pip install "smalldreamcollective-tokenmeter[openai]"     # adds tiktoken
+uv pip install "smalldreamcollective-tokenmeter[anthropic]"  # adds anthropic SDK
+uv pip install "smalldreamcollective-tokenmeter[all]"        # CLI + both providers
 
 # With interactive terminal dashboard
-uv pip install "tokenmeter[tui]"        # adds textual + plotext
+uv pip install "smalldreamcollective-tokenmeter[tui]"        # adds textual + plotext
 ```
 
 ## Quick Start

@@ -1,5 +1,5 @@
 [project]
-name = "tokenmeter"
+name = "smalldreamcollective-tokenmeter"
 version = "0.1.0"
 description = "Track, budget, and understand the cost of your AI API calls"
 readme = "README.md"
