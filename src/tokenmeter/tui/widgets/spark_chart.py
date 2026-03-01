@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import io
-
 from textual.app import ComposeResult
 from textual.widget import Widget
 from textual.widgets import Static
@@ -62,10 +60,7 @@ class SparkChart(Widget):
                     self._x_labels,
                 )
 
-        # Capture plotext output to a string
-        buf = io.StringIO()
-        plt.show(output=buf)  # type: ignore[call-arg]
-        return buf.getvalue()
+        return plt.build()
 
     def _fallback_table(self) -> str:
         """Simple text table when plotext is unavailable."""
