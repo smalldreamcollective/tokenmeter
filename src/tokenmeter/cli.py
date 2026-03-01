@@ -5,6 +5,7 @@ from __future__ import annotations
 import sys
 from datetime import datetime
 from decimal import Decimal
+from typing import Any
 
 import click
 
@@ -131,7 +132,7 @@ def prompt(
     click.echo(click.style(cost_line, fg="cyan"))
 
 
-def _call_anthropic(text: str, model: str, max_tokens: int, system: str | None):
+def _call_anthropic(text: str, model: str, max_tokens: int, system: str | None) -> tuple[Any, str]:
     try:
         import anthropic
     except ImportError:
@@ -139,7 +140,7 @@ def _call_anthropic(text: str, model: str, max_tokens: int, system: str | None):
             "anthropic package not installed. Run: uv pip install anthropic"
         )
     client = anthropic.Anthropic()
-    kwargs: dict = {
+    kwargs: dict[str, Any] = {
         "model": model,
         "max_tokens": max_tokens,
         "messages": [{"role": "user", "content": text}],
@@ -151,7 +152,7 @@ def _call_anthropic(text: str, model: str, max_tokens: int, system: str | None):
     return response, response_text
 
 
-def _call_openai(text: str, model: str, max_tokens: int, system: str | None):
+def _call_openai(text: str, model: str, max_tokens: int, system: str | None) -> tuple[Any, str]:
     try:
         import openai
     except ImportError:
@@ -420,6 +421,23 @@ def clear(ctx: click.Context, yes: bool) -> None:
     meter = _get_meter(ctx.obj["db"])
     meter.tracker._storage.clear()
     click.echo("All usage data cleared.")
+
+
+# ---------- ui ----------
+
+
+@cli.command()
+@click.pass_context
+def ui(ctx: click.Context) -> None:
+    """Launch the interactive terminal dashboard (requires tokenmeter[tui])."""
+    try:
+        from tokenmeter.tui import TokenmeterApp
+    except ImportError:
+        raise click.ClickException(
+            "Textual is not installed. Run: uv pip install 'tokenmeter[tui]'"
+        )
+    db = ctx.obj["db"]
+    TokenmeterApp(db_path=db).run()
 
 
 if __name__ == "__main__":

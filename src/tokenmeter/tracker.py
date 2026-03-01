@@ -6,7 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
-from tokenmeter._types import UsageRecord
+from tokenmeter._types import SummaryRow, UsageRecord
 from tokenmeter.cost import CostCalculator
 from tokenmeter.energy.calculator import EnergyCalculator
 from tokenmeter.providers import ProviderRegistry
@@ -268,6 +268,44 @@ class UsageTracker:
             key = getattr(r, group_by, "unknown") or "unknown"
             groups[key] += r.total_cost
         return dict(groups)
+
+    def get_summary_detailed(self, group_by: str = "model") -> dict[str, SummaryRow]:
+        """Aggregate full metrics by model, provider, user_id, or session_id.
+
+        Returns a mapping from group key to a SummaryRow with totals for cost,
+        tokens, water, energy, and call count.
+        """
+        records = self._storage.query()
+        accum: dict[str, dict[str, Any]] = defaultdict(
+            lambda: {
+                "total_cost": Decimal("0"),
+                "total_input_tokens": 0,
+                "total_output_tokens": 0,
+                "total_water_ml": Decimal("0"),
+                "total_energy_wh": Decimal("0"),
+                "call_count": 0,
+            }
+        )
+        for r in records:
+            key = getattr(r, group_by, "unknown") or "unknown"
+            row = accum[key]
+            row["total_cost"] += r.total_cost
+            row["total_input_tokens"] += r.input_tokens
+            row["total_output_tokens"] += r.output_tokens
+            row["total_water_ml"] += r.water_ml
+            row["total_energy_wh"] += r.energy_wh
+            row["call_count"] += 1
+        return {
+            key: SummaryRow(
+                total_cost=row["total_cost"],
+                total_input_tokens=row["total_input_tokens"],
+                total_output_tokens=row["total_output_tokens"],
+                total_water_ml=row["total_water_ml"],
+                total_energy_wh=row["total_energy_wh"],
+                call_count=row["call_count"],
+            )
+            for key, row in accum.items()
+        }
 
 
 def _infer_provider(model: str) -> str:

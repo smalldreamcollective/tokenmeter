@@ -107,6 +107,29 @@ class ModelEnergyProfile:
     energy_per_mtok: Decimal
 
 
+@dataclass(frozen=True)
+class Tip:
+    """An actionable suggestion for reducing token spend, energy, or water usage."""
+
+    category: str  # "cost" | "energy" | "water" | "caching"
+    title: str
+    detail: str
+    potential_saving: Decimal | None  # estimated monthly USD, or None
+    confidence: str  # "high" | "medium" | "low"
+
+
+@dataclass(frozen=True)
+class SummaryRow:
+    """Aggregated metrics for a single group (model, provider, etc.)."""
+
+    total_cost: Decimal
+    total_input_tokens: int
+    total_output_tokens: int
+    total_water_ml: Decimal
+    total_energy_wh: Decimal
+    call_count: int
+
+
 class UnknownModelError(Exception):
     """Raised when a model ID is not found in the pricing registry."""
 

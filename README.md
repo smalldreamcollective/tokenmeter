@@ -15,6 +15,9 @@ uv pip install "tokenmeter[cli]"        # adds click
 uv pip install "tokenmeter[openai]"     # adds tiktoken
 uv pip install "tokenmeter[anthropic]"  # adds anthropic SDK
 uv pip install "tokenmeter[all]"        # CLI + both providers
+
+# With interactive terminal dashboard
+uv pip install "tokenmeter[tui]"        # adds textual + plotext
 ```
 
 ## Quick Start
@@ -232,6 +235,25 @@ tokenmeter models --provider anthropic
 tokenmeter clear
 ```
 
-Set API keys via environment variables: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`.
+### API keys
+
+Copy the example env file and fill in your keys:
+
+```bash
+cp .env.example .env
+# then edit .env with your keys
+```
+
+Load the keys before running CLI commands:
+
+```bash
+# Option A — source once per shell session
+source .env && tokenmeter prompt "Hello" --model claude-3-5-haiku-20241022
+
+# Option B — pass the file to uv run (no sourcing needed)
+uv run --env-file .env tokenmeter prompt "Hello" --model claude-3-5-haiku-20241022
+```
+
+`.env` is gitignored and will never be committed.
 
 Run `tokenmeter --help` for full command reference, or `tokenmeter.help()` in a Python REPL.

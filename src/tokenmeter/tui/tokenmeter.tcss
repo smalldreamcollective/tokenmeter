@@ -1,0 +1,194 @@
+/* tokenmeter TUI — layout and color theme */
+
+/* ─────────── App shell ─────────── */
+
+Screen {
+    background: $surface;
+}
+
+Header {
+    background: $primary;
+    color: $text;
+}
+
+Footer {
+    background: $primary-darken-2;
+}
+
+TabbedContent {
+    height: 1fr;
+}
+
+TabPane {
+    padding: 1 2;
+    height: 1fr;
+}
+
+HistoryScreen,
+SummaryScreen,
+BudgetScreen,
+ChartsScreen,
+AdvisorScreen {
+    height: 1fr;
+}
+
+/* ─────────── History screen ─────────── */
+
+#history-table {
+    height: 1fr;
+}
+
+#history-filters {
+    height: 5;
+    layout: horizontal;
+    margin-bottom: 1;
+}
+
+#history-filters Input {
+    width: 1fr;
+    margin-right: 1;
+}
+
+/* ─────────── Summary screen ─────────── */
+
+#summary-table {
+    height: 1fr;
+}
+
+#summary-totals {
+    height: 5;
+    border: solid $primary;
+    padding: 1;
+    margin-top: 1;
+}
+
+/* ─────────── Budget screen ─────────── */
+
+#budget-container {
+    height: 1fr;
+    overflow-y: auto;
+}
+
+#budget-empty {
+    content-align: center middle;
+    height: 1fr;
+    color: $text-muted;
+}
+
+BudgetGauge {
+    margin-bottom: 1;
+    border: solid $surface-lighten-2;
+    padding: 1;
+    height: 6;
+}
+
+BudgetGauge .gauge-label {
+    color: $text;
+    margin-bottom: 1;
+}
+
+BudgetGauge ProgressBar {
+    height: 1;
+}
+
+BudgetGauge .gauge-detail {
+    color: $text-muted;
+}
+
+/* ─────────── Charts screen ─────────── */
+
+#charts-container {
+    layout: vertical;
+    height: 1fr;
+}
+
+#chart-spending {
+    height: 1fr;
+    border: solid $surface-lighten-2;
+    padding: 1;
+    margin-bottom: 1;
+}
+
+#chart-models {
+    height: 1fr;
+    border: solid $surface-lighten-2;
+    padding: 1;
+}
+
+SparkChart {
+    height: 1fr;
+}
+
+/* ─────────── Advisor screen ─────────── */
+
+#advisor-container {
+    layout: horizontal;
+    height: 1fr;
+}
+
+#tip-list {
+    width: 40%;
+    border-right: solid $surface-lighten-2;
+    padding-right: 1;
+}
+
+#tip-detail {
+    width: 60%;
+    padding-left: 1;
+    overflow-y: auto;
+}
+
+#advisor-empty {
+    content-align: center middle;
+    height: 1fr;
+    color: $text-muted;
+}
+
+.tip-item {
+    padding: 1;
+    border-bottom: solid $surface-lighten-1;
+}
+
+.tip-item.--highlight {
+    background: $primary-darken-2;
+}
+
+.tip-category-cost {
+    color: $warning;
+}
+
+.tip-category-energy {
+    color: $success;
+}
+
+.tip-category-water {
+    color: $accent;
+}
+
+.tip-category-caching {
+    color: $secondary;
+}
+
+/* ─────────── Shared utilities ─────────── */
+
+.section-title {
+    text-style: bold;
+    color: $primary;
+    margin-bottom: 1;
+}
+
+.muted {
+    color: $text-muted;
+}
+
+.exceeded {
+    color: $error;
+}
+
+.warning {
+    color: $warning;
+}
+
+.ok {
+    color: $success;
+}

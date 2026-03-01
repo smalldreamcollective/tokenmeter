@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
 
 from tokenmeter._types import BudgetConfig
 
@@ -37,7 +38,7 @@ def save_budgets(budgets: list[BudgetConfig], config_path: str = _DEFAULT_PATH) 
     path.parent.mkdir(parents=True, exist_ok=True)
 
     # Preserve other config keys if file exists
-    data: dict = {}
+    data: dict[str, Any] = {}
     if path.exists():
         data = json.loads(path.read_text())
 

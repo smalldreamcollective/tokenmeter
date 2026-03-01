@@ -69,7 +69,8 @@ Do not skip steps. A feature is not done until all five are complete.
 ```
 src/tokenmeter/
 ├── __init__.py          # Meter facade — main entry point, wires everything together
-├── _types.py            # All dataclasses, enums, and exceptions
+├── _types.py            # All dataclasses, enums, and exceptions (incl. Tip, SummaryRow)
+├── advisor.py           # UsageAdvisor — pure tip logic, no TUI dependency
 ├── cost.py              # CostCalculator — stateless cost math
 ├── tokens.py            # TokenCounter — local token counting
 ├── tracker.py           # UsageTracker — record/query/aggregate usage
@@ -95,10 +96,23 @@ src/tokenmeter/
 │   ├── __init__.py      # WaterRegistry — model energy lookup
 │   ├── _data.py         # Built-in energy tables (Wh per million tokens)
 │   └── calculator.py    # WaterCalculator — water usage estimation
-└── energy/
-    ├── __init__.py      # EnergyRegistry — model energy lookup (independent of water/)
-    ├── _data.py         # Built-in energy tables (Wh per million tokens)
-    └── calculator.py    # EnergyCalculator — direct Wh/kWh energy estimation
+├── energy/
+│   ├── __init__.py      # EnergyRegistry — model energy lookup (independent of water/)
+│   ├── _data.py         # Built-in energy tables (Wh per million tokens)
+│   └── calculator.py    # EnergyCalculator — direct Wh/kWh energy estimation
+└── tui/                 # Optional TUI (requires tokenmeter[tui])
+    ├── __init__.py      # Exports TokenmeterApp; import guard for textual
+    ├── app.py           # Root App — TabbedContent with 5 tabs, refresh on 'r'
+    ├── tokenmeter.tcss  # Layout + color theming
+    ├── screens/
+    │   ├── history.py   # Scrollable DataTable of UsageRecords + filters
+    │   ├── summary.py   # Aggregated totals by model/provider
+    │   ├── budget.py    # ProgressBar per budget, "no budgets" fallback
+    │   ├── charts.py    # Spending over time + per-model bar chart
+    │   └── advisor.py   # ListView of Tips + Markdown detail panel
+    └── widgets/
+        ├── budget_gauge.py  # Reusable single-budget ProgressBar + label
+        └── spark_chart.py   # plotext wrapper → Static widget
 ```
 
 ## Key Patterns
@@ -109,6 +123,8 @@ src/tokenmeter/
 - **Provider auto-detection:** `ProviderRegistry.detect(response)` inspects `__module__` to identify Anthropic vs OpenAI response objects
 - **Water is best-effort:** `WaterRegistry.get()` returns `None` for unknown models (unlike `PricingRegistry.get()` which raises `UnknownModelError`). Water calculation returns `Decimal("0")` when a model isn't recognized.
 - **Energy is best-effort:** `EnergyRegistry.get()` follows the same pattern as `WaterRegistry` — returns `None` for unknown models, `EnergyCalculator` returns `Decimal("0")`. Energy and water are fully independent modules.
+- **Advisor is pure backend:** `UsageAdvisor` in `advisor.py` has zero TUI dependency. It can be imported and used anywhere without `textual` installed.
+- **TUI is optional:** The `tui/` package is gated behind `textual` import guards. The `tokenmeter ui` CLI command prints a helpful install message if textual is missing.
 
 ## Test Helpers
 
