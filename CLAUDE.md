@@ -42,9 +42,9 @@ uv pip install -e ".[dev]"
 
 ## Git Workflow
 
-- **Always create a new branch for every feature or bug fix.** Never commit directly to `main`.
-- Branch naming: `feat-<feature-name>` for features, `fix-<description>` for bug fixes.
-- Open a pull request against `main` when the feature is complete and the verification suite passes.
+- **Always create a new branch for every change, no matter how small.** Never commit directly to `main`.
+- Branch naming: `feat-<feature-name>` for features, `fix-<description>` for bug fixes, `chore-<description>` for config/docs/tooling changes.
+- Open a pull request against `main` when the change is complete and the verification suite passes.
 
 ## New Feature Checklist
 
