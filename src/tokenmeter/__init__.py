@@ -13,6 +13,8 @@ from tokenmeter._types import (
     ModelEnergyProfile,
     ModelPricing,
     ModelWaterProfile,
+    SummaryRow,
+    Tip,
     UnknownModelError,
     UsageRecord,
     WaterProfile,
@@ -56,6 +58,8 @@ __all__ = [
     "AlertThreshold",
     "UnknownModelError",
     "BudgetExceededError",
+    "SummaryRow",
+    "Tip",
     "help",
 ]
 
@@ -241,3 +245,19 @@ class Meter:
     def on_alert(self, callback: Callable[[BudgetStatus, str], None]) -> None:
         """Register an alert callback."""
         self.alerts.on_alert(callback)
+
+    def get_tips(self, since: Any = None) -> list[Tip]:
+        """Return actionable optimization tips based on recent usage.
+
+        Args:
+            since: Optional datetime to filter records (e.g., 30 days ago).
+                   Pass None to analyze all stored records.
+
+        Returns:
+            List of Tip objects ordered by estimated impact.
+        """
+        from tokenmeter.advisor import UsageAdvisor
+
+        records = self.tracker.get_records(since=since)
+        advisor = UsageAdvisor(pricing=self._pricing, energy=self._energy_registry)
+        return advisor.analyze(records)

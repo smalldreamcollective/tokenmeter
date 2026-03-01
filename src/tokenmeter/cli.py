@@ -422,5 +422,22 @@ def clear(ctx: click.Context, yes: bool) -> None:
     click.echo("All usage data cleared.")
 
 
+# ---------- ui ----------
+
+
+@cli.command()
+@click.pass_context
+def ui(ctx: click.Context) -> None:
+    """Launch the interactive terminal dashboard (requires tokenmeter[tui])."""
+    try:
+        from tokenmeter.tui import TokenmeterApp
+    except ImportError:
+        raise click.ClickException(
+            "Textual is not installed. Run: uv pip install 'tokenmeter[tui]'"
+        )
+    db = ctx.obj["db"]
+    TokenmeterApp(db_path=db).run()
+
+
 if __name__ == "__main__":
     cli()

@@ -15,6 +15,9 @@ uv pip install "tokenmeter[cli]"        # adds click
 uv pip install "tokenmeter[openai]"     # adds tiktoken
 uv pip install "tokenmeter[anthropic]"  # adds anthropic SDK
 uv pip install "tokenmeter[all]"        # CLI + both providers
+
+# With interactive terminal dashboard
+uv pip install "tokenmeter[tui]"        # adds textual + plotext
 ```
 
 ## Quick Start

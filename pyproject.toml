@@ -27,13 +27,17 @@ tokenmeter = "tokenmeter.cli:cli"
 cli = ["click>=8.1.0"]
 openai = ["tiktoken>=0.7.0"]
 anthropic = ["anthropic>=0.40.0"]
+tui = ["textual>=0.60.0", "plotext>=5.2.0"]
 all = ["click>=8.1.0", "tiktoken>=0.7.0", "anthropic>=0.40.0"]
 dev = [
     "click>=8.1.0",
     "pytest>=8.0.0",
+    "pytest-asyncio>=0.24.0",
     "pytest-mock>=3.12.0",
     "ruff>=0.4.0",
     "mypy>=1.10.0",
+    "textual>=0.60.0",
+    "plotext>=5.2.0",
 ]
 
 [build-system]
@@ -54,3 +58,15 @@ line-length = 100
 [tool.mypy]
 python_version = "3.12"
 strict = true
+
+[[tool.mypy.overrides]]
+# textual and plotext ship no type stubs — ignore all tui/ modules
+module = [
+    "tokenmeter.tui",
+    "tokenmeter.tui.*",
+    "textual",
+    "textual.*",
+    "plotext",
+]
+ignore_missing_imports = true
+ignore_errors = true
