@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from textual.app import ComposeResult
-from textual.widgets import DataTable, Label, Select, Static, Widget
+from textual.widget import Widget
+from textual.widgets import DataTable, Label, Select, Static
 
 import tokenmeter
 

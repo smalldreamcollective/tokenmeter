@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 from textual.app import ComposeResult
-from textual.widgets import Label, Static, Widget
+from textual.widget import Widget
+from textual.widgets import Label, Static
 
 import tokenmeter
 from tokenmeter.config import load_budgets

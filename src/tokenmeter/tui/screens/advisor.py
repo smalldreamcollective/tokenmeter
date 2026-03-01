@@ -5,7 +5,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from textual.app import ComposeResult
-from textual.widgets import Label, ListItem, ListView, Markdown, Static, Widget
+from textual.widget import Widget
+from textual.widgets import Label, ListItem, ListView, Markdown, Static
 
 import tokenmeter
 from tokenmeter._types import Tip

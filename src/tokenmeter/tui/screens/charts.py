@@ -7,7 +7,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 from textual.app import ComposeResult
-from textual.widgets import Label, Static, Widget
+from textual.widget import Widget
+from textual.widgets import Label, Static
 
 import tokenmeter
 from tokenmeter.tui.widgets.spark_chart import SparkChart
