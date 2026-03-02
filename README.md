@@ -202,7 +202,7 @@ print(f"Input: ${details['input_cost']}, Output: ${details['output_cost']}")
 
 ## CLI
 
-Install with `uv pip install "tokenmeter[cli]"` to get the `tokenmeter` command.
+Install with `uv pip install "smalldreamcollective-tokenmeter[cli]"` to get the `tokenmeter` command.
 
 ```bash
 # Send a prompt and track the cost

@@ -141,4 +141,4 @@ usage = meter.tokens.from_response(api_response)
 ## Notes
 
 - Provider inference from model name: `"claude"` -> anthropic, `"gpt"/"o1"/"o3"/"o4"` -> openai.
-- For accurate token counting, install the provider SDK extras: `uv pip install "tokenmeter[anthropic]"` or `uv pip install "tokenmeter[openai]"`.
+- For accurate token counting, install the provider SDK extras: `uv pip install "smalldreamcollective-tokenmeter[anthropic]"` or `uv pip install "smalldreamcollective-tokenmeter[openai]"`.
