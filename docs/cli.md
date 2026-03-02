@@ -5,8 +5,8 @@ tokenmeter includes a command-line interface for sending prompts, estimating cos
 ## Installation
 
 ```bash
-uv pip install "tokenmeter[cli]"    # adds click
-uv pip install "tokenmeter[all]"    # CLI + both provider SDKs
+uv pip install "smalldreamcollective-tokenmeter[cli]"    # adds click
+uv pip install "smalldreamcollective-tokenmeter[all]"    # CLI + both provider SDKs
 ```
 
 Set API keys via environment variables: `ANTHROPIC_API_KEY`, `OPENAI_API_KEY`.

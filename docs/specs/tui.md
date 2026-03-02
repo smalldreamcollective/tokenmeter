@@ -97,7 +97,7 @@ Returns `dict[str, SummaryRow]` — full aggregated metrics grouped by model, pr
 
 **Install:**
 ```
-uv pip install 'tokenmeter[tui]'
+uv pip install 'smalldreamcollective-tokenmeter[tui]'
 ```
 
 ### Screens (as tabs in `TabbedContent`)

@@ -6,7 +6,7 @@ optimization tips.
 ## Installation
 
 ```bash
-uv pip install 'tokenmeter[tui]'
+uv pip install 'smalldreamcollective-tokenmeter[tui]'
 ```
 
 Requires Python 3.12+, `textual>=0.60.0`, and `plotext>=5.2.0`.
