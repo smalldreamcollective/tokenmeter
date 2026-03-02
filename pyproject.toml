@@ -1,6 +1,6 @@
 [project]
 name = "smalldreamcollective-tokenmeter"
-version = "0.1.0"
+version = "0.1.1"
 description = "Track, budget, and understand the cost of your AI API calls"
 readme = "README.md"
 license = { text = "MIT" }
