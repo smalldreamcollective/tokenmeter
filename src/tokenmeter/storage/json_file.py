@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import threading
 from datetime import datetime
 from decimal import Decimal
@@ -17,6 +18,7 @@ class JsonFileStorage(StorageBackend):
     def __init__(self, path: str = "~/.tokenmeter/usage.jsonl") -> None:
         self._path = Path(path).expanduser()
         self._path.parent.mkdir(parents=True, exist_ok=True)
+        os.chmod(self._path.parent, 0o700)
         self._lock = threading.Lock()
 
     def save(self, record: UsageRecord) -> None:
@@ -24,6 +26,7 @@ class JsonFileStorage(StorageBackend):
         with self._lock:
             with open(self._path, "a") as f:
                 f.write(line + "\n")
+            os.chmod(self._path, 0o600)
 
     def query(
         self,

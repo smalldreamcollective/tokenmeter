@@ -6,6 +6,7 @@ Stored as JSON at ~/.tokenmeter/config.json.
 from __future__ import annotations
 
 import json
+import os
 from decimal import Decimal
 from pathlib import Path
 from typing import Any
@@ -36,6 +37,7 @@ def save_budgets(budgets: list[BudgetConfig], config_path: str = _DEFAULT_PATH) 
     """Save budget configurations to disk."""
     path = Path(config_path).expanduser()
     path.parent.mkdir(parents=True, exist_ok=True)
+    os.chmod(path.parent, 0o700)
 
     # Preserve other config keys if file exists
     data: dict[str, Any] = {}
@@ -52,3 +54,4 @@ def save_budgets(budgets: list[BudgetConfig], config_path: str = _DEFAULT_PATH) 
         for b in budgets
     ]
     path.write_text(json.dumps(data, indent=2) + "\n")
+    os.chmod(path, 0o600)

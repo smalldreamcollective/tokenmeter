@@ -1,4 +1,4 @@
-import tempfile
+import stat
 import uuid
 from datetime import datetime
 from decimal import Decimal
@@ -49,6 +49,12 @@ class TestSQLiteStorage:
         results = storage.query()
         assert results[0].input_cost == Decimal("0.123456789")
         assert results[0].output_cost == Decimal("0.987654321")
+
+    def test_db_file_and_dir_have_restrictive_permissions(self, tmp_path):
+        db_path = tmp_path / "data" / "test.db"
+        SQLiteStorage(db_path=str(db_path))
+        assert stat.S_IMODE(db_path.stat().st_mode) == 0o600
+        assert stat.S_IMODE(db_path.parent.stat().st_mode) == 0o700
 
     def test_query_by_provider(self, storage):
         storage.save(_make_record(provider="anthropic"))
