@@ -37,6 +37,3 @@ htmlcov/
 # tokenmeter data
 *.db
 usage.jsonl
-
-# uv
-uv.lock
