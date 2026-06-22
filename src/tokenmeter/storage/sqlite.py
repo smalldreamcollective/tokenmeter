@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 import threading
 from datetime import datetime
@@ -43,9 +44,11 @@ class SQLiteStorage(StorageBackend):
     def __init__(self, db_path: str = "~/.tokenmeter/usage.db") -> None:
         path = Path(db_path).expanduser()
         path.parent.mkdir(parents=True, exist_ok=True)
+        os.chmod(path.parent, 0o700)
         self._db_path = str(path)
         self._lock = threading.Lock()
         self._init_db()
+        os.chmod(path, 0o600)
 
     def _init_db(self) -> None:
         with self._connect() as conn:

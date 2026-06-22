@@ -90,6 +90,7 @@ Source: `src/tokenmeter/storage/sqlite.py`
 - Decimal values stored as TEXT for precision
 - Tags stored as JSON
 - Auto-migrates schema (adds new columns like `water_ml` to existing databases)
+- Data directory and database file are created with restrictive permissions (`0700`/`0600`) so other local accounts can't read usage history
 
 ### JsonFileStorage
 
@@ -100,6 +101,7 @@ Source: `src/tokenmeter/storage/json_file.py`
 - Thread-safe (uses `threading.Lock`)
 - Decimal values stored as strings for precision
 - Backward-compatible: missing fields use sensible defaults on read
+- Data directory and file are created with restrictive permissions (`0700`/`0600`) so other local accounts can't read usage history
 
 ## Implementing a Custom Backend
 

@@ -1,3 +1,4 @@
+import stat
 import uuid
 from datetime import datetime
 from decimal import Decimal
@@ -47,6 +48,13 @@ class TestJsonFileStorage:
         storage.save(record)
         results = storage.query()
         assert results[0].input_cost == Decimal("0.123456789")
+
+    def test_file_and_dir_have_restrictive_permissions(self, tmp_path):
+        path = tmp_path / "data" / "test.jsonl"
+        storage = JsonFileStorage(path=str(path))
+        storage.save(_make_record())
+        assert stat.S_IMODE(path.stat().st_mode) == 0o600
+        assert stat.S_IMODE(path.parent.stat().st_mode) == 0o700
 
     def test_query_by_provider(self, storage):
         storage.save(_make_record(provider="anthropic"))
